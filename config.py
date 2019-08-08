@@ -2,12 +2,16 @@ import os
 
 DEBUG = True
 
-# IBM authentication details
-trish_apikey = os.environ.get('trish_apikey')
+# IBM auth details
+TRISH_APIKEY = os.environ.get('trish_apikey')
 
-classifier_ids = [
+CLASSIFIER_IDS = [
 	os.environ.get('waste_classifier_id'),
+	'explicit',
 	]
 
-vr_ver='2018-03-19'
+VR_VER ='2018-03-19'
 
+# FB auth details
+FB_ACCESS_TOKEN = os.environ.get('fb_access_token')
+FB_VERIFY_TOKEN = os.environ.get('fb_verify_token')
