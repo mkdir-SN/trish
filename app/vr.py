@@ -13,6 +13,7 @@ vr = VisualRecognitionV3(
 valid_files = (
 	'.gif',
 	'.jpg',
+	'.jpeg',
 	'.png',
 	'.tif'
 )
@@ -63,25 +64,34 @@ def get_classifiers(details):
 	return details["images"][0]["classifiers"]
 
 def get_waste_type(classifiers):
-	waste_classes = classifiers[0]["classes"]
+	waste_classes = None
+	for c in classifiers:
+		if c["classifier_id"] == config.WASTE_CLASSIFIER_ID:
+			waste_classes = c["classes"]
+			break
 
 	if waste_classes:
 		return waste_classes[0]["class"]
-	return None
+
+	return
 
 def is_explicit(classifiers):
-	explicit_classes = classifiers[1]["classes"]
+	explicit_classes = None
+
+	for c in classifiers:
+		if c["classifier_id"] == "explicit":
+			explicit_classes = c["classes"]
+			break
 
 	if explicit_classes:
 		explicity = explicit_classes[0]["class"]
-		print(explicity)
-		if explicity is "not explicit":
+		if explicity == "not explicit":
 			return False
-		elif explicity is "explicit":
+		elif explicity == "explicit":
 			return True
 	else:
 		print("Visual Recognition could not identify explicity of image.")
-		return None
+		return
 
 
 
