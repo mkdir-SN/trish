@@ -1,7 +1,8 @@
-from app import app, vr
+from app import app, messenger, vr
 from flask import Flask, request
 
 import config
+import json
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -13,13 +14,7 @@ def verify():
 @app.route('/', methods=['POST'])
 def handle():
 	data = request.json
-	sender = data['entry'][0]['messaging'][0]['sender']['id']
+	print(json.dumps(data, indent=2))
 
-def reply(request):
-	return
+	return "Handled!"
 
-def read(request):
-	return 
-
-def send(request):
-	return

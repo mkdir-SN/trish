@@ -23,11 +23,11 @@ valid_files_str = ''
 for f in valid_files:
 	valid_files_str += f + ' '
 
-def identify_waste(img_file):
+def identify_waste(img_url):
 	"""
 	Identifies waste and sends a corresponding message to user.
 	"""
-	details = get_details(img_file)
+	details = get_details(img_url)
 	classifiers = get_classifiers(details)
 	print(json.dumps(classifiers, indent=2))
 
@@ -43,11 +43,11 @@ def identify_waste(img_file):
 
 	print("The object in the image is " + waste_type + ".")
 
-def get_details(img_file):
+def get_details_img_file(img_file):
 	"""
-	Obtain results of classification query to IBM Visual Recognition custom waste model. 
+	Obtain results of classification query to IBM Visual Recognition custom waste model using img file. 
 	The model is specified by classifier_id.
-	"""
+	""" 
 
 	if os.path.splitext(img_file)[-1] not in valid_files:
 		raise TypeError("Image file is not one of the following file types: " + valid_files_str)
@@ -57,6 +57,21 @@ def get_details(img_file):
 			images_file=img_file,
 			threshold='0.7',
 			classifier_ids=config.CLASSIFIER_IDS).get_result()
+
+	return details
+
+def get_details(img_url):
+	"""
+	Obtain results of classification query to IBM Visual Recognition custom waste model using img url. 
+	The model is specified by classifier_id.
+
+	img_url has the correct protocol because img_url is provided by Messenger's POST request under attachments.
+	"""
+
+	details = vr.classify(
+		url=img_url,
+		threshold='0.7',
+		classifier_ids=config.CLASSIFIER_IDS).get_result()
 
 	return details
 
