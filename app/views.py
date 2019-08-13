@@ -1,8 +1,11 @@
-from app import app, messenger, vr
+from app import app, vr
+from app.messenger import Message, MessengerBot
 from flask import Flask, request
 
 import config
 import json
+
+messenger_bot = MessengerBot(config.FB_ACCESS_TOKEN)
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -14,6 +17,11 @@ def verify():
 @app.route('/', methods=['POST'])
 def handle():
 	data = request.json
-	print(json.dumps(data, indent=2))
+
+	m = Message(data)
+
+	messenger_bot.process(m)
+
 	return "Handled!"
+
 
