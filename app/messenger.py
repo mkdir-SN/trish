@@ -24,5 +24,3 @@ class Message:
 	def get_attachments(self):
 		return self.data["entry"][0]["messaging"][0]["message"]["attachments"]
 
-def reply(message):
-	

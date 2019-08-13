@@ -15,6 +15,5 @@ def verify():
 def handle():
 	data = request.json
 	print(json.dumps(data, indent=2))
-
 	return "Handled!"
 
