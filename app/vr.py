@@ -1,3 +1,4 @@
+from app.messenger import Message
 from ibm_watson import VisualRecognitionV3
 
 import config
@@ -9,6 +10,13 @@ vr = VisualRecognitionV3(
 	version=config.VR_VER,
 	iam_apikey=config.TRISH_APIKEY
 )
+
+waste_types = {
+	"recyclable": "Recyclable",
+	"landfill": "Landfill",
+	"compost": "Compost",
+	"hazardous_waste": "Hazardous waste"
+}
 
 valid_files = (
 	'.gif',
@@ -32,16 +40,14 @@ def identify_waste(img_url):
 	print(json.dumps(classifiers, indent=2))
 
 	if is_explicit(classifiers):
-		print("Please refrain from sending explicit images to Trish.")
-		return
+		return "explicit"
 
 	waste_type = get_waste_type(classifiers)
 
 	if waste_type is None:
-		print("Visual Recognition could not sort the object into a waste category.")
-		return
+		return None
 
-	print("The object in the image is " + waste_type + ".")
+	return waste_types[waste_type]
 
 def get_details_img_file(img_file):
 	"""
