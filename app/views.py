@@ -1,4 +1,4 @@
-from app import app
+from app import app, messenger, vr
 from flask import Flask, request
 
 import config

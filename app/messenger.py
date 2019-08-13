@@ -2,7 +2,6 @@ from app import vr
 
 import config
 
-""" 
 class Message:
 
 	def __init__(self, data):
@@ -24,4 +23,4 @@ class Message:
 
 	def get_attachments(self):
 		return self.data["entry"][0]["messaging"][0]["message"]["attachments"]
-"""
+
