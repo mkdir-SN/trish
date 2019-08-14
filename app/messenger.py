@@ -17,6 +17,10 @@ class Message:
 				payload = attachment["payload"]
 				if not self.is_sticker(payload):
 					img_urls.append(payload["url"])
+				else:
+					img_urls.append("sticker")
+			else:
+				img_urls.append("unknown")
 		return img_urls
 
 	def is_text(self):
@@ -57,22 +61,29 @@ class MessengerBot:
 		self.response(typing)
 
 		if message.is_text():
-			self.reply(uid, "Trish currently cannot handle text-type messages. Please send images instead!")
+			self.reply(uid, "Sorry, I currently can't handle text-type messages. Please send me images instead!")
 		else:
 			img_urls = message.get_img_urls()
 			photo_no = 1
 
 			for img_url in img_urls:
 
+				if img_url == "sticker":
+					self.reply(uid, "Sorry, but I can't sort stickers into waste categories, as cute as they are!")
+					continue
+				elif img_url == "unknown":
+					self.reply(uid, "Sorry, I don't have the ability to process the type of message you just sent me. Consider sending me images instead!")
+					continue 
+
 				waste_category = vr.identify_waste(img_url)
 
 				if waste_category:
 					if waste_category == "explicit":
-						self.reply(uid, "Please do not send explicit material to Trish.")
+						self.reply(uid, "Please don't send explicit material(s) to me. Thanks!")
 						break
 					self.reply(uid, waste_category + ' in photo ' + str(photo_no) + '.')
 				else:
-					self.reply(uid, "Trish could not sort the object in photo " + str(photo_no) + " into a waste category.")
+					self.reply(uid, "Sorry, I couldn't sort the object in photo " + str(photo_no) + " into a waste category.")
 
 				photo_no += 1
 
