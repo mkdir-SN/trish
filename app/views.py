@@ -18,8 +18,6 @@ def verify():
 def handle():
 	data = request.json
 
-	print(json.dumps(data, indent=2))
-
 	m = Message(data)
 
 	messenger_bot.process(m)

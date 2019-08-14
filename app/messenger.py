@@ -15,10 +15,10 @@ class Message:
 		for attachment in attachments:
 			if attachment["type"] == "image":
 				payload = attachment["payload"]
-				if not self.is_sticker(payload):
-					img_urls.append(payload["url"])
-				else:
+				if self.is_sticker(payload):
 					img_urls.append("sticker")
+				else:
+					img_urls.append(payload["url"])
 			else:
 				img_urls.append("unknown")
 		return img_urls
@@ -39,9 +39,6 @@ class Message:
 	def get_sender_id(self):
 		return self.data["entry"][0]["messaging"][0]["sender"]["id"]
 
-	def get_recipient_id(self):
-		return self.data["entry"][0]["messaging"][0]["recipient"]["id"]
-
 	def get_attachments(self):
 		return self.data["entry"][0]["messaging"][0]["message"]["attachments"]
 
@@ -61,30 +58,36 @@ class MessengerBot:
 		self.response(typing)
 
 		if message.is_text():
-			self.reply(uid, "Sorry, I currently can't handle text-type messages. Please send me images instead!")
+			self.reply(uid, "Sorry, I currently can't handle text-based messages. Please send me images instead!")
 		else:
 			img_urls = message.get_img_urls()
-			photo_no = 1
+			photo_no = 1 
 
-			for img_url in img_urls:
+			if len(img_urls) > 1:
+				self.reply(uid, "The numbering of the photos is from left to right, top to bottom.")
 
-				if img_url == "sticker":
+			for img_type in img_urls:
+
+				# To avoid using VR API for stickers or unknown filetypes (.pdf, .zip, etc.)
+				if img_type == "sticker":
 					self.reply(uid, "Sorry, but I can't sort stickers into waste categories, as cute as they are!")
 					continue
-				elif img_url == "unknown":
+				elif img_type == "unknown":
 					self.reply(uid, "Sorry, I don't have the ability to process the type of message you just sent me. Consider sending me images instead!")
 					continue 
 
+				img_url = img_type	
 				waste_category = vr.identify_waste(img_url)
 
 				if waste_category:
 					if waste_category == "explicit":
 						self.reply(uid, "Please don't send explicit material(s) to me. Thanks!")
 						break
-					self.reply(uid, waste_category + ' in photo ' + str(photo_no) + '.')
+					self.reply(uid, '{0} in photo {1}.'.format(waste_category, str(photo_no)))
 				else:
-					self.reply(uid, "Sorry, I couldn't sort the object in photo " + str(photo_no) + " into a waste category.")
+					self.reply(uid, "Sorry, I couldn't sort the object in photo {0} into a waste category.".format(str(photo_no)))
 
+				# To keep track of the photo number for user readability 
 				photo_no += 1
 
 	def reply(self, uid, body):
