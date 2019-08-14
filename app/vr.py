@@ -111,8 +111,7 @@ def is_explicit(classifiers):
 		elif explicity == "explicit":
 			return True
 	else:
-		print("Visual Recognition could not identify explicity of image.")
-		return
+		return None
 
 
 
