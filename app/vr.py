@@ -1,4 +1,3 @@
-from app.messenger import Message
 from ibm_watson import VisualRecognitionV3
 
 import config

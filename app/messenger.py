@@ -20,7 +20,7 @@ class Message:
 				else:
 					img_urls.append(payload["url"])
 			else:
-				img_urls.append("unknown")
+				img_urls.append(None)
 		return img_urls
 
 	def is_text(self):
@@ -58,39 +58,38 @@ class MessengerBot:
 		self.response(typing)
 
 		if message.is_text():
-			self.reply(uid, "Sorry, I currently can't handle text-based messages. Please send me images instead!")
+			self.send(uid, "Sorry, I currently can't handle text-based messages. Please send me images instead!")
 		else:
 			img_urls = message.get_img_urls()
 			photo_no = 1 
 
 			if len(img_urls) > 1:
-				self.reply(uid, "The numbering of the photos is from left to right, top to bottom.")
+				self.send(uid, "The numbering of the photos is from left to right, top to bottom.")
 
-			for img_type in img_urls:
+			for img_url in img_urls:
 
 				# To avoid using VR API for stickers or unknown filetypes (.pdf, .zip, etc.)
-				if img_type == "sticker":
-					self.reply(uid, "Sorry, but I can't sort stickers into waste categories, as cute as they are!")
+				if img_url == "sticker":
+					self.send(uid, "Sorry, but I can't sort stickers into waste categories, as cute as they are!")
 					continue
-				elif img_type == "unknown":
-					self.reply(uid, "Sorry, I don't have the ability to process the type of message you just sent me. Consider sending me images instead!")
+				elif img_url is None:
+					self.send(uid, "Sorry, I don't have the ability to process the type of message you just sent me. Consider sending me images instead!")
 					continue 
 
-				img_url = img_type	
 				waste_category = vr.identify_waste(img_url)
 
 				if waste_category:
 					if waste_category == "explicit":
-						self.reply(uid, "Please don't send explicit material(s) to me. Thanks!")
+						self.send(uid, "Please don't send explicit material(s) to me. Thanks!")
 						break
-					self.reply(uid, '{0} in photo {1}.'.format(waste_category, str(photo_no)))
+					self.send(uid, '{0} in photo {1}.'.format(waste_category, str(photo_no)))
 				else:
-					self.reply(uid, "Sorry, I couldn't sort the object in photo {0} into a waste category.".format(str(photo_no)))
+					self.send(uid, "Sorry, I couldn't sort the object in photo {0} into a waste category.".format(str(photo_no)))
 
 				# To keep track of the photo number for user readability 
 				photo_no += 1
 
-	def reply(self, uid, body):
+	def send(self, uid, body):
 
 		# Display typing by sending a separate request
 		msg = {
