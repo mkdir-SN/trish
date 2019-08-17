@@ -6,11 +6,11 @@ import pytest
 import unittest
 
 # Images from each waste category for testing
-human = "https://raw.githubusercontent.com/mkdir-SN/trish/master/tests/test_vr_samples/human.jpg"
-luminescent_bulb = "https://raw.githubusercontent.com/mkdir-SN/trish/master/tests/test_vr_samples/luminescent_bulb.jpg"
-paper_cup = "https://raw.githubusercontent.com/mkdir-SN/trish/master/tests/test_vr_samples/paper_cup.jpg"
-pencil = "https://raw.githubusercontent.com/mkdir-SN/trish/master/tests/test_vr_samples/pencil.jpg"
-plastic_bottle = "https://raw.githubusercontent.com/mkdir-SN/trish/master/tests/test_vr_samples/plastic_bottle.jpg"
+human = "https://raw.githubusercontent.com/mkdir-SN/trish/master/app/tests/test_vr_samples/human.jpg"
+luminescent_bulb = "https://raw.githubusercontent.com/mkdir-SN/trish/master/app/tests/test_vr_samples/luminescent_bulb.jpg"
+paper_cup = "https://raw.githubusercontent.com/mkdir-SN/trish/master/app/tests/test_vr_samples/paper_cup.jpg"
+pencil = "https://raw.githubusercontent.com/mkdir-SN/trish/master/app/tests/test_vr_samples/pencil.jpg"
+plastic_bottle = "https://raw.githubusercontent.com/mkdir-SN/trish/master/app/tests/test_vr_samples/plastic_bottle.jpg"
 
 def test_vr_apikey():
 	assert config.TRISH_APIKEY is not None
